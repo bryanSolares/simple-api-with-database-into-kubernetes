@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: development
+  name: database
+  labels:
+    app: api-service
+    tier: database
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: database
+      labels:
+        app: api-service-database
+        tier: database
+    spec:
+      containers:
+        - name: database
+          image: postgres:15.2
+          envFrom:
+            - secretRef:
+                name: database-credentials
+          ports:
+            - containerPort: 5432
+  selector:
+    matchLabels:
+      app: api-service-database
+      tier: database
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: development
+  name: api
+  labels:
+    app: api-service
+    tier: api
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: api
+      labels:
+        app: api-service-api
+        tier: api
+    spec:
+      containers:
+        - name: api
+          image: backend:0.1.0
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: api-configmap
+            - secretRef:
+                name: api-credentials
+  selector:
+    matchLabels:
+      app: api-service-api
+      tier: api
