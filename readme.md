@@ -12,18 +12,18 @@
 - Create a Pod that uses the ConfigMap and Secrets
 - Create simple API with Node.js and Express with PostgreSQL
 
-# build image into minikube
-
-```bash
-docker build -t backend:0.1.0 .
-```
-
 # change docker env into minikube
 
 [Doc minikube docker-env](https://minikube.sigs.k8s.io/docs/commands/docker-env/)
 
 ```bash
 eval $(minikube docker-env)
+```
+
+# build image into minikube
+
+```bash
+docker build -t backend:0.1.0 .
 ```
 
 # encode credentials for user, password and database
